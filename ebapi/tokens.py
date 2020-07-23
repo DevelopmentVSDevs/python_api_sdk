@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 import logging
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -117,8 +118,9 @@ class FileTokens(metaclass=TokensMeta):
         for idx, row in self.user.iterrows():
             ref = row["refresh_token"]
             try:
-                self.user.loc[idx] = refresh_token(ref)
+                self.user.loc[idx] = self.refresh_token(ref)
             except Exception:
+                # NEED A BETTER EXCEPTION HERE, traps other errors
                 pass
             finally:
                 self.save_user_file()
@@ -207,7 +209,14 @@ class FileTokens(metaclass=TokensMeta):
     def refresh_token(self, ref_token):
         """Refreshe the tokens for a single thermostat."""
         logger.info("Original refresh_tokens")
-        return
+        
+        # VSDEVS - Not sure why this is commented out - with a few fixes it works
+        #return
+        try:
+            api_key = os.environ["ECOBEE_APPLICATION_KEY"]
+        except:
+            raise RuntimeError("Unable to access environment var: ECOBEE_APPLICATION_KEY")
+            
         headers = {"Content-Type": "application/json;charset=UTF-8"}
         url = 'https://api.ecobee.com/token'
         params = {"grant_type": "refresh_token",
