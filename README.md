@@ -91,6 +91,20 @@ Object Defitions: https://www.ecobee.com/home/developer/api/documentation/v1/aut
 >>> interface.get_settings(thermostat_identifier)
 >>> 
 ```
+
+Another Practical Example
+
+``` python
+>>> from ebapi.api_interface import ApiInterface
+>>> interface = ApiInterface()
+>>> # THIS IS YOUR THERMOSTAT ID NUMBER - YOU CAN GET FROM WEB INTERFACE or from interface.show_users()
+>>> thermo_id="XXXXXXXXXXXXXXXXXX"
+>>> # TURN THERMO OFF
+>>> body={"hvacMode":"off"}
+>>> interface.update_settings(body,thermo_id)
+>>> # Get all the sensor data for this Thermo
+>>> interface.get_sensors(thermo_id)
+```
 </div>
 </body>
 </html>
